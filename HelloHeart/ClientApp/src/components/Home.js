@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StyledBtn from '../Shared/Button'
+import { regValidate } from '../Helpers/StringHelper'
 import './Home.css'
 
 export default function Home() {
@@ -14,9 +15,9 @@ export default function Home() {
   function onSubmit(e) {
     e.preventDefault();
     if(!testInput || !testNumber) return;
+    if(!regValidate(testInput)) return;
     submitBloodTestData(testInput, testNumber)
     resetStates();
-    
   }
 
   function resetStates() {
@@ -31,7 +32,7 @@ export default function Home() {
   }
 
   async function submitBloodTestData(testInput, testNumber) {
-    const bloodTest = { TestInput: testInput, TestNumber: testNumber }
+    const bloodTest = { TestInput: testInput.toUpperCase(), TestNumber: testNumber }
     const request = {
       method: 'POST',
       Accept: 'application/json',

@@ -1,4 +1,5 @@
-﻿using HelloHeart.Model;
+﻿using HelloHeart.Helpers;
+using HelloHeart.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -19,10 +20,15 @@ namespace HelloHeart.Manager
         {
             _configuration = configuration;
         }
-        public string BloodTestAnalysis(BloodTestRequest bloodTest)
+        public async Task<string> BloodTestAnalysis(BloodTestRequest bloodTest)
         {
             var path = _configuration["BloodTestConfig:Url"];
-            throw new NotImplementedException();
+            var bloodTestConfigMap = await GetBloodTestConfig(path);
+
+            InputValidator inputValidator = new InputValidator();
+            var key = inputValidator.ExtractKey(bloodTest.TestInput, bloodTestConfigMap);
+
+            return key;
         }
 
         public async Task<BloodTestConfigResponse> GetBloodTestConfig(string path)
@@ -34,7 +40,7 @@ namespace HelloHeart.Manager
                 var result = response.Content.ReadAsStringAsync();
                 var bloodTestObj = result.Result;
                 var dataSet = JsonConvert.DeserializeObject<BloodTestConfigResponse>(bloodTestObj);
-                if (dataSet.BloodTestConfig != null)
+                if (dataSet?.BloodTestConfig != null)
                     return dataSet;
             }
 
