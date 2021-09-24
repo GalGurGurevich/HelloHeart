@@ -12,10 +12,13 @@ namespace HelloHeart.Helpers
         public string ExtractKey(string input, BloodTestConfigResponse map)
         {
             string key = "";
+            HashSet<string> set = new HashSet<string>();
 
-            var regMatch = new Regex("^[a-zA-Z0-9'(),-:/!]*$").IsMatch(input);
-            
-            
+            foreach (var item in map.BloodTestConfig)
+            {
+                set.Add(item.Name);
+            }
+
             if (map.BloodTestConfig.Any(x => x.Name.Contains(input)))
             {
                 var res = map.BloodTestConfig.FirstOrDefault(x => x.Name.Contains(input));

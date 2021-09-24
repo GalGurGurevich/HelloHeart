@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StyledBtn from '../Shared/Button'
-import { regValidate } from '../Helpers/StringHelper'
+import { regValidate } from '../Helpers/stringHelper'
 import './Home.css'
 
 export default function Home() {
