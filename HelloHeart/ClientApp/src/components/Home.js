@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StyledBtn from '../Shared/Button'
-import { regValidate } from '../Helpers/stringHelper'
+import { regValidate, enumToText } from '../Helpers/stringHelper'
 import './Home.css'
 
 export default function Home() {
@@ -8,6 +8,7 @@ export default function Home() {
   const [testInput, setTestInput] = useState("");
   const [testNumber, setTestNumber] = useState("");
   const [bloodTestResult, setBloodTestResult] = useState(null)
+  const header = `Hello Heart <3`
 
   useEffect(() => {
     initBloodTestConfigData();
@@ -28,16 +29,6 @@ export default function Home() {
   function resetStates() {
     setTestInput("")
     setTestNumber("");
-  }
-
-  function enumToText(number) {
-    switch (number) {
-      case 0: return "Unknown"
-      case 1: return "Good"
-      case 2: return "Bad";
-      default:
-        break;
-    }
   }
 
   async function initBloodTestConfigData() {
@@ -61,6 +52,7 @@ export default function Home() {
 
   return (
     <div className="home-container">
+      <h3>{header}</h3> 
       <form className="input-test-form" onSubmit={onSubmit}>
         <label className="label-header">Testing Type: </label>
         <input className="input-field" type='text'value={testInput} onChange={e => setTestInput(e.target.value)}></input>
@@ -69,7 +61,7 @@ export default function Home() {
         <button type='submit'>Submit Result</button>
       </form>
       {/* <StyledBtn txt={"Submit"} func={() => document.forms[0].submit()}/> */}
-      { bloodTestResult ? <div>Your {bloodTestResult?.result || "Unkown"} Is {enumToText(bloodTestResult.resultEvaluation)}.</div> : null }
+      { bloodTestResult ? <div>Your {bloodTestResult?.result || "Unkown"} Is {enumToText(bloodTestResult.resultEvaluation)}</div> : null }
     </div>
   )
 }

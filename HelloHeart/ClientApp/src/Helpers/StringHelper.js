@@ -5,3 +5,13 @@ export function regValidate(val) {
     }
     return false;
   }
+
+export function enumToText(number) {
+    switch (number) {
+      case 0: return "Unknown :S"
+      case 1: return "Good :)"
+      case 2: return "Bad :(";
+      default:
+        break;
+    }
+  }
