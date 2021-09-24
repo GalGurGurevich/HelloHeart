@@ -8,13 +8,13 @@ export default function Home() {
   const [testNumber, setTestNumber] = useState("");
 
   useEffect(() => {
-    populateBloodTestData();
+    initBloodTestConfigData();
   },[])
 
   function onSubmit(e) {
     e.preventDefault();
     if(!testInput || !testNumber) return;
-    populateBloodTestData(testInput, testNumber)
+    submitBloodTestData(testInput, testNumber)
     resetStates();
     
   }
@@ -24,7 +24,13 @@ export default function Home() {
     setTestNumber("");
   }
 
-  async function populateBloodTestData(testInput, testNumber) {
+  async function initBloodTestConfigData() {
+    const response = await fetch('bloodtest');
+    const data = await response.json();
+    console.log(response, data);
+  }
+
+  async function submitBloodTestData(testInput, testNumber) {
     const bloodTest = { TestInput: testInput, TestNumber: testNumber }
     const request = {
       method: 'POST',
@@ -35,12 +41,6 @@ export default function Home() {
     fetch('bloodtest/setResults', request)
       .then(response => response.json())
       .then(data => console.log(data));
-
-
-    // console.log("results sent to backend: ", results)
-    // const response = await fetch(`bloodtest/${results.testInput}/${results.testNumber}`);
-    // const data = await response.json();
-    // console.log(response, data);
   }
 
   return (
