@@ -1,0 +1,19 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-test-form {
+    display: flex;
+}
+
+.label-header {
+    font-weight: bold;
+    margin-bottom: unset;
+    margin-right: 5px;
+}
+
+.input-field {
+    margin-right: 5px;
+}
+
