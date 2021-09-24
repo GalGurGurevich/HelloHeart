@@ -1,4 +1,5 @@
-﻿using HelloHeart.Model;
+﻿using HelloHeart.Manager;
+using HelloHeart.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -16,25 +17,28 @@ namespace HelloHeart.Controllers
     {
         private readonly ILogger<BloodTestController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IBloodTestManager _bloodTestManager;
 
-        public BloodTestController(ILogger<BloodTestController> logger, IConfiguration configuration)
+        public BloodTestController(ILogger<BloodTestController> logger, IConfiguration configuration, IBloodTestManager bloodTestManager)
         {
             _logger = logger;
             _configuration = configuration;
+            _bloodTestManager = bloodTestManager;
         }
 
         [HttpGet]
-        public ActionResult<BloodTestResponse> Get()
+        public async Task<ActionResult<BloodTestResponse>> Get()
         {
-            BloodTestResponse bloodTestResponse = new BloodTestResponse() { Result = "bloodTestResponse" };
-            return Ok(bloodTestResponse);
+            var path = _configuration["BloodTestConfig:Url"];
+            var result = await _bloodTestManager.GetBloodTestConfig(path);
+            return Ok(result);
         }
 
         [HttpPost, Route("SetResults")]
         public ActionResult<BloodTestResponse> SetResults([FromBody] BloodTestRequest bloodTest)
         {
-            var dataSet = _configuration["BloodTestConfig:Url"];
-            BloodTestResponse bloodTestResponse = new BloodTestResponse() { Result = "bloodTestResponse" };
+            BloodTestResponse bloodTestResponse = new BloodTestResponse();
+            bloodTestResponse.Result = _bloodTestManager.BloodTestAnalysis(bloodTest);
             return Ok(bloodTestResponse);
         }
 

@@ -6,6 +6,7 @@ namespace HelloHeart.Manager
 {
     public interface IBloodTestManager
     {
-        public Task<List<BloodTestConfigDataRow>> GetBloodTestConfig(string path);
+        public Task<BloodTestConfigResponse> GetBloodTestConfig(string path);
+        public string BloodTestAnalysis(BloodTestRequest bloodTest);
     }
 }
