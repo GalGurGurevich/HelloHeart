@@ -14,10 +14,9 @@ export default function Home() {
   function onSubmit(e) {
     e.preventDefault();
     if(!testInput || !testNumber) return;
-    // const data = { testInput: testInput, testNumber: testNumber };
-    // populateBloodTestData(data)
+    populateBloodTestData(testInput, testNumber)
     resetStates();
-    console.log("Submitted with:", testInput, testNumber)
+    
   }
 
   function resetStates() {
@@ -25,10 +24,23 @@ export default function Home() {
     setTestNumber("");
   }
 
-  async function populateBloodTestData() {
-    const response = await fetch('bloodtest');
-    const data = await response.json();
-    console.log(response, data);
+  async function populateBloodTestData(testInput, testNumber) {
+    const bloodTest = { TestInput: testInput, TestNumber: testNumber }
+    const request = {
+      method: 'POST',
+      Accept: 'application/json',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bloodTest)
+    };
+    fetch('bloodtest/setResults', request)
+      .then(response => response.json())
+      .then(data => console.log(data));
+
+
+    // console.log("results sent to backend: ", results)
+    // const response = await fetch(`bloodtest/${results.testInput}/${results.testNumber}`);
+    // const data = await response.json();
+    // console.log(response, data);
   }
 
   return (

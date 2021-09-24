@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HelloHeart.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,12 @@ namespace HelloHeart.Controllers
     public class BloodTestController : ControllerBase
     {
         private readonly ILogger<BloodTestController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public BloodTestController(ILogger<BloodTestController> logger)
+        public BloodTestController(ILogger<BloodTestController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -25,5 +29,14 @@ namespace HelloHeart.Controllers
             BloodTestResponse bloodTestResponse = new BloodTestResponse() { Result = "bloodTestResponse" };
             return Ok(bloodTestResponse);
         }
+
+        [HttpPost, Route("SetResults")]
+        public ActionResult<BloodTestResponse> SetResults([FromBody] BloodTestRequest bloodTest)
+        {
+            var dataSet = _configuration["BloodTestConfig:Url"];
+            BloodTestResponse bloodTestResponse = new BloodTestResponse() { Result = "bloodTestResponse" };
+            return Ok(bloodTestResponse);
+        }
+
     }
 }
