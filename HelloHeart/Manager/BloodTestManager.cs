@@ -13,12 +13,13 @@ namespace HelloHeart.Manager
 {
     public class BloodTestManager : IBloodTestManager
     {
-        static HttpClient client = new HttpClient();
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public BloodTestManager(IConfiguration configuration)
+        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory)
         {
             _configuration = configuration;
+            _clientFactory = clientFactory;
         }
         public async Task<string> BloodTestAnalysis(BloodTestRequest bloodTest)
         {
@@ -33,12 +34,12 @@ namespace HelloHeart.Manager
 
         public async Task<BloodTestConfigResponse> GetBloodTestConfig(string path)
         {
+            var client = _clientFactory.CreateClient();
             BloodTestConfigResponse bloodTestConfigResponse = new BloodTestConfigResponse();
             HttpResponseMessage response = await client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
-                var result = response.Content.ReadAsStringAsync();
-                var bloodTestObj = result.Result;
+                var bloodTestObj = await response.Content.ReadAsStringAsync();
                 var dataSet = JsonConvert.DeserializeObject<BloodTestConfigResponse>(bloodTestObj);
                 if (dataSet?.BloodTestConfig != null)
                     return dataSet;
