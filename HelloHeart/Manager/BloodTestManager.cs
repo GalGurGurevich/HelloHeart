@@ -21,15 +21,17 @@ namespace HelloHeart.Manager
             _configuration = configuration;
             _clientFactory = clientFactory;
         }
-        public async Task<string> BloodTestAnalysis(BloodTestRequest bloodTest)
+        public async Task<BloodTestResponse> BloodTestAnalysis(BloodTestRequest bloodTest)
         {
+            BloodTestResponse bloodTestResponse = new BloodTestResponse();
             var path = _configuration["BloodTestConfig:Url"];
             var bloodTestConfigMap = await GetBloodTestConfig(path);
 
             InputValidator inputValidator = new InputValidator();
-            var key = inputValidator.ExtractKey(bloodTest.TestInput, bloodTestConfigMap);
+            bloodTestResponse.Result = inputValidator.ExtractKey(bloodTest.TestInput, bloodTestConfigMap);
+            bloodTestResponse.ResultEvaluation = inputValidator.ExtractValue(bloodTestResponse.Result, bloodTestConfigMap, int.Parse(bloodTest.TestNumber));
 
-            return key;
+            return bloodTestResponse;
         }
 
         public async Task<BloodTestConfigResponse> GetBloodTestConfig(string path)

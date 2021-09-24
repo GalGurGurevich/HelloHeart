@@ -37,8 +37,7 @@ namespace HelloHeart.Controllers
         [HttpPost, Route("SetResults")]
         public async Task<ActionResult<BloodTestResponse>> SetResults([FromBody] BloodTestRequest bloodTest)
         {
-            BloodTestResponse bloodTestResponse = new BloodTestResponse();
-            bloodTestResponse.Result = await _bloodTestManager.BloodTestAnalysis(bloodTest);
+            BloodTestResponse bloodTestResponse = await _bloodTestManager.BloodTestAnalysis(bloodTest);
             return Ok(bloodTestResponse);
         }
 

@@ -7,10 +7,15 @@ export default function Home() {
 
   const [testInput, setTestInput] = useState("");
   const [testNumber, setTestNumber] = useState("");
+  const [bloodTestResult, setBloodTestResult] = useState(null)
 
   useEffect(() => {
     initBloodTestConfigData();
   },[])
+
+  useEffect(() => {
+    console.log("bloodTestResult: ", bloodTestResult)
+  },[bloodTestResult])
 
   function onSubmit(e) {
     e.preventDefault();
@@ -23,6 +28,16 @@ export default function Home() {
   function resetStates() {
     setTestInput("")
     setTestNumber("");
+  }
+
+  function enumToText(number) {
+    switch (number) {
+      case 0: return "Unknown"
+      case 1: return "Good"
+      case 2: return "Bad";
+      default:
+        break;
+    }
   }
 
   async function initBloodTestConfigData() {
@@ -41,7 +56,7 @@ export default function Home() {
     };
     fetch('bloodtest/setResults', request)
       .then(response => response.json())
-      .then(data => console.log(data));
+      .then(data => setBloodTestResult(data));
   }
 
   return (
@@ -54,7 +69,7 @@ export default function Home() {
         <button type='submit'>Submit Result</button>
       </form>
       {/* <StyledBtn txt={"Submit"} func={() => document.forms[0].submit()}/> */}
-      <div>Your testInput: {testInput} and testNumber: {testNumber}</div>
+      { bloodTestResult ? <div>Your {bloodTestResult?.result || "Unkown"} Is {enumToText(bloodTestResult.resultEvaluation)}.</div> : null }
     </div>
   )
 }
