@@ -12,43 +12,47 @@ namespace HelloHeart.Helpers
         public string DiagnoseBloodTest(string input, BloodTestConfigResponse data)
         {
             string key = "";
-
             if (input.Length < 2)
             {
                 return key;
             }
 
-            if(input.Contains(" "))
-            {
-                var inputWordsCollection = input.Split(new string[] { " ", "-" }, StringSplitOptions.None);
-                key = SearchStringMatchInCollection(inputWordsCollection, data.BloodTestConfig.Select(x => x.Name));
-                if (!string.IsNullOrEmpty(key))
-                    return key;
-            }
-            else
-            {
-                var cleanInput = CleanStringFromSymbols(input);
-
-                if (data.BloodTestConfig.Any(x => x.Name.Contains(cleanInput)))
-                {
-                    var options = data.BloodTestConfig.Where(x => x.Name.Contains(cleanInput)).ToList();
-                    if(options != null)
-                    {
-                        if(options.Count == 1)
-                        {
-                            var match = options.FirstOrDefault().Name;
-                            key = match;
-                            return key;
-                        }
-                        if(options.Count > 1)
-                        {
-                            return key;
-                        }
-                    }
-                }
-            }
-
+            key = StringMatchAlgo(input, data);
+            
             return key;
+
+
+            //if(input.Contains(" "))
+            //{
+            //    var inputWordsCollection = input.Split(new string[] { " ", "-" }, StringSplitOptions.None);
+            //    key = SearchStringMatchInCollection(inputWordsCollection, data.BloodTestConfig.Select(x => x.Name));
+            //    if (!string.IsNullOrEmpty(key))
+            //        return key;
+            //}
+            //else
+            //{
+            //    var cleanInput = CleanStringFromSymbols(input);
+
+            //    if (data.BloodTestConfig.Any(x => x.Name.Contains(cleanInput)))
+            //    {
+            //        var options = data.BloodTestConfig.Where(x => x.Name.Contains(cleanInput)).ToList();
+            //        if(options != null)
+            //        {
+            //            if(options.Count == 1)
+            //            {
+            //                var match = options.FirstOrDefault().Name;
+            //                key = match;
+            //                return key;
+            //            }
+            //            if(options.Count > 1)
+            //            {
+            //                return key;
+            //            }
+            //        }
+            //    }
+            //}
+
+            //return key;
         }
 
         public DiagnoseStatus DiagnoseCondition(string key, BloodTestConfigResponse data, int input)
@@ -89,6 +93,28 @@ namespace HelloHeart.Helpers
         public string CleanStringFromSymbols(string input)
         {
             return input.Trim(new Char[] { ' ', '*', '.', ',', });
+        }
+
+        private string StringMatchAlgo(string input, BloodTestConfigResponse data)
+        {
+            Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
+
+            var scoredResults = FuzzySharp.Process.ExtractSorted(input, data.BloodTestConfig.Select(x => x.Name));
+
+            var mostMatch = scoredResults?.FirstOrDefault();
+
+            var arr = scoredResults?.ToArray();
+
+            if (arr.Length >= 2)
+            {
+                if(mostMatch.Score == arr[1].Score)
+                {
+                    return "";
+                }
+            }
+
+            return mostMatch.Value;
+
         }
 
     }
