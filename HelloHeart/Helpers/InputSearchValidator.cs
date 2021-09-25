@@ -20,8 +20,8 @@ namespace HelloHeart.Helpers
 
             if(input.Contains(" "))
             {
-                var collection = input.Split(new string[] { " ", "-" }, StringSplitOptions.None);
-                key = SearchStringMatchInCollection(collection, data.BloodTestConfig.Select(x => x.Name).ToList());
+                var inputWordsCollection = input.Split(new string[] { " ", "-" }, StringSplitOptions.None);
+                key = SearchStringMatchInCollection(inputWordsCollection, data.BloodTestConfig.Select(x => x.Name));
                 if (!string.IsNullOrEmpty(key))
                     return key;
             }
@@ -71,16 +71,16 @@ namespace HelloHeart.Helpers
             }
         }
 
-        public string SearchStringMatchInCollection(IEnumerable<string> keys, IEnumerable<string> collection)
+        public string SearchStringMatchInCollection(IEnumerable<string> keys, IEnumerable<string> testData)
         {
-            foreach (var item in collection)
+            foreach (var test in testData)
             {
                 foreach (var key in keys)
                 {
                     if (string.IsNullOrEmpty(key)) continue;
 
-                    if (item.Contains(CleanStringFromSymbols(key)))
-                        return item;
+                    if (test.Contains(CleanStringFromSymbols(key)))
+                        return test;
                 }
             }
             return "";
