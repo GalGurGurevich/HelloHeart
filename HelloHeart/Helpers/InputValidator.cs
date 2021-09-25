@@ -36,8 +36,22 @@ namespace HelloHeart.Helpers
             {
                 if (map.BloodTestConfig.Any(x => x.Name.Contains(input)))
                 {
-                    var res = map.BloodTestConfig.FirstOrDefault(x => x.Name.Contains(input));
-                    key = res.Name;
+                    var options = map.BloodTestConfig.Where(x => x.Name.Contains(input)).ToList();
+                    if(options != null)
+                    {
+                        if(options.Count == 1)
+                        {
+                            var match = options.FirstOrDefault().Name;
+                            key = match;
+                            return key;
+                        }
+                        if(options.Count > 1)
+                        {
+                            return key;
+                        }
+                    }
+                    //var res = map.BloodTestConfig.FirstOrDefault(x => x.Name.Contains(input));
+                    //key = res.Name;
                 }
             }
 

@@ -1,5 +1,6 @@
 ﻿using HelloHeart.Helpers;
 using HelloHeart.Model;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -16,12 +17,14 @@ namespace HelloHeart.Manager
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
         private readonly IInputValidator _inputValidator;
+        private readonly IMemoryCache _cache;
 
-        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory, IInputValidator inputValidator)
+        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory, IInputValidator inputValidator, IMemoryCache memoryCache)
         {
             _configuration = configuration;
             _clientFactory = clientFactory;
             _inputValidator = inputValidator;
+            _cache = memoryCache;
         }
         public async Task<BloodTestResponse> BloodTestAnalysis(BloodTestRequest bloodTest)
         {
