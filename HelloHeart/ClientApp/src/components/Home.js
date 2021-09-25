@@ -50,6 +50,13 @@ export default function Home() {
       .then(data => setBloodTestResult(data));
   }
 
+  function renderOutputStr(txtResult, numiricResult) {
+    const resultState = enumToText(numiricResult);
+    const officialTestName = txtResult;
+    if(resultState.startsWith("Unknown")) return resultState;
+    return `Your ${officialTestName} is ${resultState}`
+  }
+
   return (
     <div className="home-container">
       <h3 className="home-header">{header}</h3> 
@@ -64,7 +71,7 @@ export default function Home() {
 
       <span class="heart"></span>
       {/* <StyledBtn txt={"Submit"} func={() => document.forms[0].submit()}/> */}
-      { bloodTestResult ? <div className="result-test-txt">Your {bloodTestResult?.result || "Unkown"} Is {enumToText(bloodTestResult.resultEvaluation)}</div> : null }
+      { bloodTestResult ? <div className="result-test-txt">{renderOutputStr(bloodTestResult.result, bloodTestResult.resultEvaluation)}</div> : null }
     </div>
   )
 }
