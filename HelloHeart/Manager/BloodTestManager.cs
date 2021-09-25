@@ -18,6 +18,7 @@ namespace HelloHeart.Manager
         private readonly IHttpClientFactory _clientFactory;
         private readonly IInputSearchValidator _inputValidator;
         private readonly IMemoryCache _cache;
+        private static string _key = "key";
 
         public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory, IInputSearchValidator inputValidator, IMemoryCache memoryCache)
         {
@@ -39,14 +40,20 @@ namespace HelloHeart.Manager
 
         public async Task<BloodTestConfigResponse> GetBloodTestConfig()
         {
+            BloodTestConfigResponse bloodTestConfigResponse = new BloodTestConfigResponse();
+            if(_cache.TryGetValue(_key, out bloodTestConfigResponse))
+            {
+                bloodTestConfigResponse = (BloodTestConfigResponse)_cache.Get(_key);
+                return bloodTestConfigResponse;
+            }
             var path = _configuration["BloodTestConfig:Url"];
             var client = _clientFactory.CreateClient();
-            BloodTestConfigResponse bloodTestConfigResponse = new BloodTestConfigResponse();
             HttpResponseMessage response = await client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
                 var bloodTestObj = await response.Content.ReadAsStringAsync();
                 var dataSet = JsonConvert.DeserializeObject<BloodTestConfigResponse>(bloodTestObj);
+                _cache.Set(_key, dataSet);
                 if (dataSet?.BloodTestConfig != null)
                     return dataSet;
             }
