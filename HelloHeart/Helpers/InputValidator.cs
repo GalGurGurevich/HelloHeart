@@ -21,7 +21,7 @@ namespace HelloHeart.Helpers
 
             if(input.Contains(" "))
             {
-                var collection = input.Split(" ");
+                var collection = input.Split(new string[] { " ", "-" }, StringSplitOptions.None);
                 key = SearchStringMatchInCollection(collection, map.BloodTestConfig.Select(x => x.Name).ToList());
                 if (!string.IsNullOrEmpty(key))
                     return key;
@@ -64,12 +64,19 @@ namespace HelloHeart.Helpers
             {
                 foreach (var key in keys)
                 {
-                    if (item.Contains(key))
+                    if (string.IsNullOrEmpty(key)) continue;
+
+                    if (item.Contains(CleanStringFromSymbols(key)))
                         return item;
                 }
             }
-
             return "";
+        }
+
+        private string CleanStringFromSymbols(string input)
+        {
+            //if (string.IsNullOrEmpty(input)) return TestValueOutput.Unknown.ToString();
+            return input.Trim(new Char[] { ' ', '*', '.', ',', });
         }
 
     }
