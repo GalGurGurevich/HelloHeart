@@ -29,18 +29,17 @@ namespace HelloHeart.Manager
         public async Task<BloodTestResponse> BloodTestAnalysis(BloodTestRequest bloodTest)
         {
             BloodTestResponse bloodTestResponse = new BloodTestResponse();
-            var path = _configuration["BloodTestConfig:Url"];
-            var bloodTestConfigMap = await GetBloodTestConfig(path);
+            var bloodTestConfigMap = await GetBloodTestConfig();
 
-            InputSearchValidator inputValidator = new InputSearchValidator();
-            bloodTestResponse.Result = _inputValidator.ExtractKey(bloodTest.TestInput, bloodTestConfigMap);
-            bloodTestResponse.ResultEvaluation = _inputValidator.ExtractValue(bloodTestResponse.Result, bloodTestConfigMap, int.Parse(bloodTest.TestNumber));
+            bloodTestResponse.Result = _inputValidator.DiagnoseBloodTest(bloodTest.TestInput, bloodTestConfigMap);
+            bloodTestResponse.ResultEvaluation = _inputValidator.DiagnoseCondition(bloodTestResponse.Result, bloodTestConfigMap, int.Parse(bloodTest.TestNumber));
 
             return bloodTestResponse;
         }
 
-        public async Task<BloodTestConfigResponse> GetBloodTestConfig(string path)
+        public async Task<BloodTestConfigResponse> GetBloodTestConfig()
         {
+            var path = _configuration["BloodTestConfig:Url"];
             var client = _clientFactory.CreateClient();
             BloodTestConfigResponse bloodTestConfigResponse = new BloodTestConfigResponse();
             HttpResponseMessage response = await client.GetAsync(path);

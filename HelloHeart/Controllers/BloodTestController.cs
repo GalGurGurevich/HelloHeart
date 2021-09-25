@@ -16,21 +16,18 @@ namespace HelloHeart.Controllers
     public class BloodTestController : ControllerBase
     {
         private readonly ILogger<BloodTestController> _logger;
-        private readonly IConfiguration _configuration;
         private readonly IBloodTestManager _bloodTestManager;
 
-        public BloodTestController(ILogger<BloodTestController> logger, IConfiguration configuration, IBloodTestManager bloodTestManager)
+        public BloodTestController(ILogger<BloodTestController> logger, IBloodTestManager bloodTestManager)
         {
             _logger = logger;
-            _configuration = configuration;
             _bloodTestManager = bloodTestManager;
         }
 
         [HttpGet]
         public async Task<ActionResult<BloodTestResponse>> Get()
         {
-            var path = _configuration["BloodTestConfig:Url"];
-            var result = await _bloodTestManager.GetBloodTestConfig(path);
+            var result = await _bloodTestManager.GetBloodTestConfig();
             return Ok(result);
         }
 

@@ -8,10 +8,10 @@ namespace HelloHeart
     public class BloodTestResponse
     {
         public string Result { get; set; }
-        public TestValueOutput ResultEvaluation { get; set; }
+        public DiagnoseStatus ResultEvaluation { get; set; }
     }
 
-    public enum TestValueOutput
+    public enum DiagnoseStatus
     {
         Unknown,
         Good,

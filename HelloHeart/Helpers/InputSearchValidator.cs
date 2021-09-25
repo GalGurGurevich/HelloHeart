@@ -9,7 +9,7 @@ namespace HelloHeart.Helpers
 {
     public class InputSearchValidator : IInputSearchValidator
     {
-        public string ExtractKey(string input, BloodTestConfigResponse map)
+        public string DiagnoseBloodTest(string input, BloodTestConfigResponse data)
         {
             string key = "";
 
@@ -18,17 +18,10 @@ namespace HelloHeart.Helpers
                 return key;
             }
 
-            HashSet<string> set = new HashSet<string>();
-
-            foreach (var item in map.BloodTestConfig)
-            {
-                set.Add(item.Name);
-            }
-
             if(input.Contains(" "))
             {
                 var collection = input.Split(new string[] { " ", "-" }, StringSplitOptions.None);
-                key = SearchStringMatchInCollection(collection, map.BloodTestConfig.Select(x => x.Name).ToList());
+                key = SearchStringMatchInCollection(collection, data.BloodTestConfig.Select(x => x.Name).ToList());
                 if (!string.IsNullOrEmpty(key))
                     return key;
             }
@@ -36,9 +29,9 @@ namespace HelloHeart.Helpers
             {
                 var cleanInput = CleanStringFromSymbols(input);
 
-                if (map.BloodTestConfig.Any(x => x.Name.Contains(cleanInput)))
+                if (data.BloodTestConfig.Any(x => x.Name.Contains(cleanInput)))
                 {
-                    var options = map.BloodTestConfig.Where(x => x.Name.Contains(cleanInput)).ToList();
+                    var options = data.BloodTestConfig.Where(x => x.Name.Contains(cleanInput)).ToList();
                     if(options != null)
                     {
                         if(options.Count == 1)
@@ -58,23 +51,23 @@ namespace HelloHeart.Helpers
             return key;
         }
 
-        public TestValueOutput ExtractValue(string key, BloodTestConfigResponse map, int input)
+        public DiagnoseStatus DiagnoseCondition(string key, BloodTestConfigResponse data, int input)
         {
-            var pair = map.BloodTestConfig.FirstOrDefault(x => x.Name == key);
+            var pair = data.BloodTestConfig.FirstOrDefault(x => x.Name == key);
             if (pair == null)
-                return TestValueOutput.Unknown;
+                return DiagnoseStatus.Unknown;
 
             if(input <= pair.Threshold)
             {
-                return TestValueOutput.Good;
+                return DiagnoseStatus.Good;
             } 
             else if(input > pair.Threshold)
             {
-                return TestValueOutput.Bad;
+                return DiagnoseStatus.Bad;
             }
             else
             {
-                return TestValueOutput.Unknown;
+                return DiagnoseStatus.Unknown;
             }
         }
 
