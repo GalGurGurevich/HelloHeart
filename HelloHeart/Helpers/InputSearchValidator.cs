@@ -51,8 +51,6 @@ namespace HelloHeart.Helpers
         }
         private string StringMatchAlgo(string input, BloodTestConfigResponse data)
         {
-            Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
-
             var scoredResults = FuzzySharp.Process.ExtractSorted(input, data.BloodTestConfig.Select(x => x.Name));
 
             var mostMatch = scoredResults?.FirstOrDefault();
