@@ -12,6 +12,12 @@ namespace HelloHeart.Helpers
         public string ExtractKey(string input, BloodTestConfigResponse map)
         {
             string key = "";
+
+            if (input.Length < 2)
+            {
+                return key;
+            }
+
             HashSet<string> set = new HashSet<string>();
 
             foreach (var item in map.BloodTestConfig)
