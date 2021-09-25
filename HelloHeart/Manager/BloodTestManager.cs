@@ -16,10 +16,10 @@ namespace HelloHeart.Manager
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
-        private readonly IInputValidator _inputValidator;
+        private readonly IInputSearchValidator _inputValidator;
         private readonly IMemoryCache _cache;
 
-        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory, IInputValidator inputValidator, IMemoryCache memoryCache)
+        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory, IInputSearchValidator inputValidator, IMemoryCache memoryCache)
         {
             _configuration = configuration;
             _clientFactory = clientFactory;
@@ -32,7 +32,7 @@ namespace HelloHeart.Manager
             var path = _configuration["BloodTestConfig:Url"];
             var bloodTestConfigMap = await GetBloodTestConfig(path);
 
-            InputValidator inputValidator = new InputValidator();
+            InputSearchValidator inputValidator = new InputSearchValidator();
             bloodTestResponse.Result = _inputValidator.ExtractKey(bloodTest.TestInput, bloodTestConfigMap);
             bloodTestResponse.ResultEvaluation = _inputValidator.ExtractValue(bloodTestResponse.Result, bloodTestConfigMap, int.Parse(bloodTest.TestNumber));
 

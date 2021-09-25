@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HelloHeart.Helpers
 {
-    public interface IInputValidator
+    public interface IInputSearchValidator
     {
         public string ExtractKey(string input, BloodTestConfigResponse map);
         public TestValueOutput ExtractValue(string key, BloodTestConfigResponse map, int input);

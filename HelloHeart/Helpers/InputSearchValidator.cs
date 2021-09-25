@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HelloHeart.Helpers
 {
-    public class InputValidator : IInputValidator
+    public class InputSearchValidator : IInputSearchValidator
     {
         public string ExtractKey(string input, BloodTestConfigResponse map)
         {
@@ -34,9 +34,11 @@ namespace HelloHeart.Helpers
             }
             else
             {
-                if (map.BloodTestConfig.Any(x => x.Name.Contains(input)))
+                var cleanInput = CleanStringFromSymbols(input);
+
+                if (map.BloodTestConfig.Any(x => x.Name.Contains(cleanInput)))
                 {
-                    var options = map.BloodTestConfig.Where(x => x.Name.Contains(input)).ToList();
+                    var options = map.BloodTestConfig.Where(x => x.Name.Contains(cleanInput)).ToList();
                     if(options != null)
                     {
                         if(options.Count == 1)
@@ -50,8 +52,6 @@ namespace HelloHeart.Helpers
                             return key;
                         }
                     }
-                    //var res = map.BloodTestConfig.FirstOrDefault(x => x.Name.Contains(input));
-                    //key = res.Name;
                 }
             }
 
