@@ -8,7 +8,7 @@ export default function Home() {
   const [testInput, setTestInput] = useState("");
   const [testNumber, setTestNumber] = useState("");
   const [bloodTestResult, setBloodTestResult] = useState(null)
-  const header = `Hello Heart <3`
+  const header = `Hello Heart`
 
   useEffect(() => {
     initBloodTestConfigData();
