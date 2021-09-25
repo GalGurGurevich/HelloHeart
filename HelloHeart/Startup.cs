@@ -1,3 +1,4 @@
+using HelloHeart.Helpers;
 using HelloHeart.Manager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +26,7 @@ namespace HelloHeart
             services.AddControllersWithViews();
             services.AddHttpClient();
             services.AddScoped<IBloodTestManager, BloodTestManager>();
+            services.AddTransient<IInputValidator, InputValidator>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

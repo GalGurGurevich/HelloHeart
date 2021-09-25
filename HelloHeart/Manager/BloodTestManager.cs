@@ -15,11 +15,13 @@ namespace HelloHeart.Manager
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly IInputValidator _inputValidator;
 
-        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory)
+        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory, IInputValidator inputValidator)
         {
             _configuration = configuration;
             _clientFactory = clientFactory;
+            _inputValidator = inputValidator;
         }
         public async Task<BloodTestResponse> BloodTestAnalysis(BloodTestRequest bloodTest)
         {
@@ -28,8 +30,8 @@ namespace HelloHeart.Manager
             var bloodTestConfigMap = await GetBloodTestConfig(path);
 
             InputValidator inputValidator = new InputValidator();
-            bloodTestResponse.Result = inputValidator.ExtractKey(bloodTest.TestInput, bloodTestConfigMap);
-            bloodTestResponse.ResultEvaluation = inputValidator.ExtractValue(bloodTestResponse.Result, bloodTestConfigMap, int.Parse(bloodTest.TestNumber));
+            bloodTestResponse.Result = _inputValidator.ExtractKey(bloodTest.TestInput, bloodTestConfigMap);
+            bloodTestResponse.ResultEvaluation = _inputValidator.ExtractValue(bloodTestResponse.Result, bloodTestConfigMap, int.Parse(bloodTest.TestNumber));
 
             return bloodTestResponse;
         }

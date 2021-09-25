@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HelloHeart.Helpers
 {
-    public class InputValidator
+    public class InputValidator : IInputValidator
     {
         public string ExtractKey(string input, BloodTestConfigResponse map)
         {
@@ -58,7 +58,7 @@ namespace HelloHeart.Helpers
             }
         }
 
-        private string SearchStringMatchInCollection(IEnumerable<string> keys, IEnumerable<string> collection)
+        public string SearchStringMatchInCollection(IEnumerable<string> keys, IEnumerable<string> collection)
         {
             foreach (var item in collection)
             {
@@ -73,7 +73,7 @@ namespace HelloHeart.Helpers
             return "";
         }
 
-        private string CleanStringFromSymbols(string input)
+        public string CleanStringFromSymbols(string input)
         {
             return input.Trim(new Char[] { ' ', '*', '.', ',', });
         }
