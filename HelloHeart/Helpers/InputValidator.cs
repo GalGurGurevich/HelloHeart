@@ -75,7 +75,6 @@ namespace HelloHeart.Helpers
 
         private string CleanStringFromSymbols(string input)
         {
-            //if (string.IsNullOrEmpty(input)) return TestValueOutput.Unknown.ToString();
             return input.Trim(new Char[] { ' ', '*', '.', ',', });
         }
 

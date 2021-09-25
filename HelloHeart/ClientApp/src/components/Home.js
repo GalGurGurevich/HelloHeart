@@ -56,7 +56,7 @@ export default function Home() {
       
       <form className="input-test-form" onSubmit={onSubmit}>
         <label className="label-header">Testing Type: </label>
-        <input className="input-field" type='text'value={testInput} onChange={e => setTestInput(e.target.value)}></input>
+        <input className="input-field" type='text'value={testInput} onChange={e => setTestInput(e.target.value)} placeholder="what should we check today?"></input>
         <label className="label-header">Testing Numiric Result: </label>
         <input className="input-field" type='number' value={testNumber} onChange={e => setTestNumber(e.target.value)} placeholder={0}></input>
         <button type='submit'>Submit Result</button>
