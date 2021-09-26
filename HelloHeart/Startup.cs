@@ -26,7 +26,7 @@ namespace HelloHeart
             services.AddControllersWithViews();
             services.AddHttpClient();
             services.AddScoped<IBloodTestManager, BloodTestManager>();
-            services.AddTransient<IInputSearchValidator, InputSearchValidator>();
+            services.AddScoped<IInputSearchValidator, InputSearchValidator>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

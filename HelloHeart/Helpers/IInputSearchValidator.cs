@@ -7,6 +7,5 @@ namespace HelloHeart.Helpers
     {
         public string DiagnoseBloodTest(string input, BloodTestConfigResponse map);
         public DiagnoseStatus DiagnoseCondition(string key, BloodTestConfigResponse map, int input);
-        public string CleanStringFromSymbols(string input);
     }
 }

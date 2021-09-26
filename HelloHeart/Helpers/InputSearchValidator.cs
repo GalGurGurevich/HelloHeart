@@ -18,10 +18,6 @@ namespace HelloHeart.Helpers
                 return key;
             }
 
-            var matchExists = CheckIfAnyMachExisits(input, data);
-
-            if (!matchExists) return key;
-
             key = StringMatchAlgo(input, data);
             
             return key;
@@ -45,21 +41,22 @@ namespace HelloHeart.Helpers
                 return DiagnoseStatus.Unknown;
             }
         }
-        public string CleanStringFromSymbols(string input)
-        {
-            return input.Trim(new Char[] { ' ', '*', '.', ',', '-'});
-        }
         private string StringMatchAlgo(string input, BloodTestConfigResponse data)
         {
+            const int minimumMatchLimit = 30;
+
             var scoredResults = FuzzySharp.Process.ExtractSorted(input, data.BloodTestConfig.Select(x => x.Name));
 
-            var mostMatch = scoredResults?.FirstOrDefault();
+            var scoredResultsArr = scoredResults?.ToArray();
 
-            var arr = scoredResults?.ToArray();
+            if (scoredResultsArr.All(x => x.Score <= minimumMatchLimit))
+                return "";
 
-            if (arr.Length >= 2)
+            var mostMatch = scoredResultsArr?.FirstOrDefault();
+
+            if (scoredResultsArr.Length >= 2)
             {
-                if(mostMatch.Score == arr[1].Score)
+                if(mostMatch.Score == scoredResultsArr[1].Score)
                 {
                     return "";
                 }
@@ -67,39 +64,6 @@ namespace HelloHeart.Helpers
 
             return mostMatch.Value;
 
-        }
-        private bool CheckIfAnyMachExisits(string input, BloodTestConfigResponse data)
-        {
-            Regex regex = new Regex(CleanStringFromSymbols(input.ToUpper()));
-            bool containsAny = false;
-
-            if (input.Contains(" "))
-            {
-                var allTextWords = input.Split(new string[] { " ", "-" }, StringSplitOptions.None);
-
-                foreach (var test in data.BloodTestConfig)
-                {
-                    foreach (var word in allTextWords)
-                    {
-                        if (string.IsNullOrEmpty(word)) continue;
-
-                        Regex reg = new Regex(CleanStringFromSymbols(word));
-                        containsAny = reg.IsMatch(test.Name.ToUpper());
-                        if (containsAny)
-                            return containsAny;
-                    }
-                }
-            }
-
-            foreach (var test in data.BloodTestConfig)
-            {
-                containsAny = regex.IsMatch(test.Name.ToUpper());
-                if (containsAny)
-                    return containsAny;
-            }
-
-            return containsAny;
-             
         }
 
     }
