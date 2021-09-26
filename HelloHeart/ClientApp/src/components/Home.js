@@ -7,16 +7,14 @@ export default function Home() {
 
   const [testInput, setTestInput] = useState("");
   const [testNumber, setTestNumber] = useState("");
-  const [bloodTestResult, setBloodTestResult] = useState(null)
+  const [bloodTestResult, setBloodTestResult] = useState(null);
+  const inputError = testInput && testInput.length > 1 && !regValidate(testInput);
   const header = `Hello Heart`
+  const errorTxt = `Please avoid typing symbols, try again`
 
   useEffect(() => {
     initBloodTestConfigData();
   },[])
-
-  useEffect(() => {
-    console.log("bloodTestResult: ", bloodTestResult)
-  },[bloodTestResult])
 
   function onSubmit(e) {
     e.preventDefault();
@@ -41,7 +39,6 @@ export default function Home() {
     const bloodTest = { TestInput: testInput.toUpperCase(), TestNumber: testNumber }
     const request = {
       method: 'POST',
-      Accept: 'application/json',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(bloodTest)
     };
@@ -53,7 +50,7 @@ export default function Home() {
   function renderOutputStr(txtResult, numiricResult) {
     const resultState = enumToText(numiricResult);
     const officialTestName = txtResult;
-    if(resultState.startsWith("Unknown")) return resultState;
+    if(numiricResult == 0) return resultState;
     return `Your ${officialTestName} is ${resultState}`
   }
 
@@ -68,10 +65,9 @@ export default function Home() {
         <input className="input-field" type='number' value={testNumber} onChange={e => setTestNumber(e.target.value)} placeholder={0}></input>
         <button type='submit'>Submit Result</button>
       </form>
-
+      {inputError && <span className="error-line">{errorTxt}</span>}
       <span class="heart"></span>
-      {/* <StyledBtn txt={"Submit"} func={() => document.forms[0].submit()}/> */}
-      { bloodTestResult ? <div className="result-test-txt">{renderOutputStr(bloodTestResult.result, bloodTestResult.resultEvaluation)}</div> : null }
+      { bloodTestResult && <div className="result-test-txt">{renderOutputStr(bloodTestResult.result, bloodTestResult.resultEvaluation)}</div>}
     </div>
   )
 }

@@ -58,11 +58,6 @@
             transform-origin: 0 100%;
   }
   
-  /* .heart:before {
-    top: -15px;
-    left: 0;
-  } */
-  
   .heart:after {
     left: 0;
     -webkit-transform: rotate(45deg);
@@ -78,7 +73,10 @@
   }
 
 @media only screen and (max-width: 768px) {
-  .home-container {
+  .home-container button {
+    background: linear-gradient(45deg, red, pink);
+    color: white;
+    border-radius: 8px;
   }
   .home-header {  
     text-align: center;
@@ -97,6 +95,12 @@
   .result-test-txt {
       text-align: center;
       font-weight: bold;
+  }
+
+  .error-line {
+      color: red;
+      font-weight: bold;
+      text-align: center;
   }
 }
 

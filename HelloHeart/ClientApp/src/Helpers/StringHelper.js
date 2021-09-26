@@ -1,9 +1,6 @@
 export function regValidate(val) {
     const myRegExp = /^[ A-Za-z"(),-:/!]*$/;
-    if(myRegExp.test(val)) {
-      return true;
-    }
-    return false;
+    return myRegExp.test(val)
   }
 
 export function enumToText(number) {
