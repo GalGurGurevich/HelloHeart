@@ -70,7 +70,7 @@ namespace HelloHeart.Helpers
         }
         private bool CheckIfAnyMachExisits(string input, BloodTestConfigResponse data)
         {
-            Regex regex = new Regex(CleanStringFromSymbols(input));
+            Regex regex = new Regex(CleanStringFromSymbols(input.ToUpper()));
             bool containsAny = false;
 
             if (input.Contains(" "))

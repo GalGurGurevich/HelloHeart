@@ -32,13 +32,11 @@ export default function Home() {
   }
 
   async function initBloodTestConfigData() {
-    const response = await fetch('bloodtest');
-    const data = await response.json();
-    console.log(response, data);
+    await fetch('bloodtest');
   }
 
   async function submitBloodTestData(testInput, testNumber) {
-    const bloodTest = { TestInput: testInput.toUpperCase(), TestNumber: testNumber }
+    const bloodTest = { TestInput: testInput, TestNumber: testNumber }
     const request = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -57,7 +55,11 @@ export default function Home() {
     const resultState = enumToText(numiricResult);
     const officialTestName = txtResult;
     if(numiricResult == 0) return resultState;
-    return `Your ${officialTestName} is ${resultState}`
+    const bloodTest = `Your ${officialTestName} is `
+    const resultColor = numiricResult == 1 ? "green": "black";
+    return (
+        <div>{bloodTest}<span style={{color: resultColor}}>{resultState}</span></div>
+      )
   }
 
   return (
@@ -71,9 +73,9 @@ export default function Home() {
         <input className="input-field" type='number' value={testNumber} onChange={e => setTestNumber(e.target.value)} placeholder={0}></input>
         <button type='submit'>Submit Result</button>
       </form>
-      
+
       {inputError && <span className="error-line">{errorTxt}</span>}
-      <span class="heart"></span>
+      <span className="heart"></span>
       { loading && <div className="loader">{loaderTxt}</div>}
       { bloodTestResult && <div className="result-test-txt">{renderOutputStr(bloodTestResult.result, bloodTestResult.resultEvaluation)}</div>}
     </div>

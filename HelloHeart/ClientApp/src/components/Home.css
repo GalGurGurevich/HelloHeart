@@ -81,12 +81,15 @@
   .home-header {  
     text-align: center;
     background: linear-gradient(45deg, red, pink);
+    -webkit-box-shadow: 0px 4px 7px 3px rgba(255,77,82,0.26); 
+    box-shadow: 0px 4px 7px 3px rgba(255,77,82,0.26);
   }
   .input-test-form {
       flex-direction: column;
       padding: 5px;
   }
   .label-header {
+    
   }
   .input-field {
     margin-top: 5px;
