@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import StyledBtn from '../Shared/Button'
 import { regValidate, enumToText } from '../Helpers/stringHelper'
 import './Home.css'
 
@@ -8,9 +7,12 @@ export default function Home() {
   const [testInput, setTestInput] = useState("");
   const [testNumber, setTestNumber] = useState("");
   const [bloodTestResult, setBloodTestResult] = useState(null);
+  const [loading, setLoading] = useState(false);
   const inputError = testInput && testInput.length > 1 && !regValidate(testInput);
+
   const header = `Hello Heart`
   const errorTxt = `Please avoid typing symbols, try again`
+  const loaderTxt = `Calculating Results Please Wait...`;
 
   useEffect(() => {
     initBloodTestConfigData();
@@ -42,9 +44,13 @@ export default function Home() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(bloodTest)
     };
+    setLoading(true);
     fetch('bloodtest/setResults', request)
       .then(response => response.json())
-      .then(data => setBloodTestResult(data));
+      .then(data => {
+        setLoading(false);
+        setBloodTestResult(data);
+      });
   }
 
   function renderOutputStr(txtResult, numiricResult) {
@@ -65,8 +71,10 @@ export default function Home() {
         <input className="input-field" type='number' value={testNumber} onChange={e => setTestNumber(e.target.value)} placeholder={0}></input>
         <button type='submit'>Submit Result</button>
       </form>
+      
       {inputError && <span className="error-line">{errorTxt}</span>}
       <span class="heart"></span>
+      { loading && <div className="loader">{loaderTxt}</div>}
       { bloodTestResult && <div className="result-test-txt">{renderOutputStr(bloodTestResult.result, bloodTestResult.resultEvaluation)}</div>}
     </div>
   )

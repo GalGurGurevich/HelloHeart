@@ -96,10 +96,12 @@
       text-align: center;
       font-weight: bold;
   }
-
   .error-line {
       color: red;
       font-weight: bold;
+      text-align: center;
+  }
+  .loader {
       text-align: center;
   }
 }
