@@ -14,10 +14,6 @@ export default function Home() {
   const errorTxt = `Please avoid typing symbols, try again`
   const loaderTxt = `Calculating Results Please Wait...`;
 
-  useEffect(() => {
-    initBloodTestConfigData();
-  },[])
-
   function onSubmit(e) {
     e.preventDefault();
     if(!testInput || !testNumber) return;
@@ -29,10 +25,6 @@ export default function Home() {
   function resetStates() {
     setTestInput("")
     setTestNumber("");
-  }
-
-  async function initBloodTestConfigData() {
-    await fetch('bloodtest');
   }
 
   async function submitBloodTestData(testInput, testNumber) {

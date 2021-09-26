@@ -16,11 +16,11 @@ namespace HelloHeart.Manager
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
-        private readonly IInputSearchValidator _inputValidator;
+        private readonly IUserBloodTestAnalyzer _inputValidator;
         private readonly IMemoryCache _cache;
         private static string _key = "key";
 
-        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory, IInputSearchValidator inputValidator, IMemoryCache memoryCache)
+        public BloodTestManager(IConfiguration configuration, IHttpClientFactory clientFactory, IUserBloodTestAnalyzer inputValidator, IMemoryCache memoryCache)
         {
             _configuration = configuration;
             _clientFactory = clientFactory;

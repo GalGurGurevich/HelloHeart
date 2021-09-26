@@ -7,32 +7,24 @@ using System.Threading.Tasks;
 
 namespace HelloHeart.Helpers
 {
-    public class InputSearchValidator : IInputSearchValidator
+    public class UserBloodTestAnalyzer : IUserBloodTestAnalyzer
     {
         public string DiagnoseBloodTest(string input, BloodTestConfigResponse data)
         {
-            string key = "";
-
-            if (input.Length < 2)
-            {
-                return key;
-            }
-
-            key = StringMatchAlgo(input, data);
-            
-            return key;
+            string bloodTestKey = StringMatchAlgo(input, data);
+            return bloodTestKey;
         }
-        public DiagnoseStatus DiagnoseCondition(string key, BloodTestConfigResponse data, int input)
+        public DiagnoseStatus DiagnoseCondition(string bloodTestKey, BloodTestConfigResponse data, int input)
         {
-            var pair = data.BloodTestConfig.FirstOrDefault(x => x.Name == key);
-            if (pair == null)
+            var bloodTestEntity = data.BloodTestConfig.FirstOrDefault(x => x.Name == bloodTestKey);
+            if (bloodTestEntity == null)
                 return DiagnoseStatus.Unknown;
 
-            if(input <= pair.Threshold)
+            if(input <= bloodTestEntity.Threshold)
             {
                 return DiagnoseStatus.Good;
             } 
-            else if(input > pair.Threshold)
+            else if(input > bloodTestEntity.Threshold)
             {
                 return DiagnoseStatus.Bad;
             }
@@ -43,6 +35,11 @@ namespace HelloHeart.Helpers
         }
         private string StringMatchAlgo(string input, BloodTestConfigResponse data)
         {
+            if (input.Length < 2)
+            {
+                return "";
+            }
+
             const int minimumMatchLimit = 30;
 
             var scoredResults = FuzzySharp.Process.ExtractSorted(input, data.BloodTestConfig.Select(x => x.Name));

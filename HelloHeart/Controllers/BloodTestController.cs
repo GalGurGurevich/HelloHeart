@@ -24,13 +24,6 @@ namespace HelloHeart.Controllers
             _bloodTestManager = bloodTestManager;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<BloodTestResponse>> Get()
-        {
-            var result = await _bloodTestManager.GetBloodTestConfig();
-            return Ok(result);
-        }
-
         [HttpPost, Route("SetResults")]
         public async Task<ActionResult<BloodTestResponse>> SetResults([FromBody] BloodTestRequest bloodTest)
         {
