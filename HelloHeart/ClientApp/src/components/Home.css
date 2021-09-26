@@ -9,6 +9,7 @@
 
 .input-test-form {
     display: flex;
+    flex-direction: column;
 }
 
 .label-header {
@@ -85,7 +86,6 @@
     box-shadow: 0px 4px 7px 3px rgba(255,77,82,0.26);
   }
   .input-test-form {
-      flex-direction: column;
       padding: 5px;
   }
   .label-header {
