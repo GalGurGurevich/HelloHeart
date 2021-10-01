@@ -39,7 +39,7 @@ namespace HelloHeart.Manager
             return bloodTestResponse;
         }
 
-        public async Task<Dictionary<string, int>> GetBloodTestConfig()
+        private async Task<Dictionary<string, int>> GetBloodTestConfig()
         {
             if (_cache.TryGetValue(_key, out Dictionary<string, int> keyValuePairs))
             {
