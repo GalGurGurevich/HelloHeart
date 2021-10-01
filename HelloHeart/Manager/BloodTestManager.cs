@@ -33,6 +33,11 @@ namespace HelloHeart.Manager
             var bloodTestConfigMap = await GetBloodTestConfig();
 
             bloodTestResponse.Result = _inputValidator.DiagnoseBloodTest(bloodTest.TestInput, bloodTestConfigMap);
+            if(string.IsNullOrEmpty(bloodTestResponse.Result))
+            {
+                bloodTestResponse.ResultEvaluation = DiagnoseStatus.Unknown;
+                return bloodTestResponse;
+            }
             var treshold = bloodTestConfigMap[bloodTestResponse.Result];
             bloodTestResponse.ResultEvaluation = _inputValidator.DiagnoseCondition(bloodTest.TestNumber, treshold);
 

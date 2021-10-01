@@ -11,8 +11,7 @@ namespace HelloHeart.Helpers
     {
         public string DiagnoseBloodTest(string input, Dictionary<string, int> data)
         {
-            string bloodTestKey = StringMatchAlgo(input, data);
-            return bloodTestKey;
+            return StringMatchAlgo(input, data);
         }
         public DiagnoseStatus DiagnoseCondition(int input, int treshold)
         {
@@ -20,13 +19,9 @@ namespace HelloHeart.Helpers
             {
                 return DiagnoseStatus.Good;
             } 
-            else if(input > treshold)
-            {
-                return DiagnoseStatus.Bad;
-            }
             else
             {
-                return DiagnoseStatus.Unknown;
+                return DiagnoseStatus.Bad;
             }
         }
         private string StringMatchAlgo(string input, Dictionary<string, int> data)
