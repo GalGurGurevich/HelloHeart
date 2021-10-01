@@ -27,7 +27,7 @@ export default function Home() {
   }
 
   async function submitBloodTestData(testInput, testNumber) {
-    const bloodTest = { TestInput: testInput, TestNumber: testNumber }
+    const bloodTest = { TestInput: testInput, TestNumber: +testNumber }
     const request = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

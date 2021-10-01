@@ -9,22 +9,18 @@ namespace HelloHeart.Helpers
 {
     public class UserBloodTestAnalyzer : IUserBloodTestAnalyzer
     {
-        public string DiagnoseBloodTest(string input, BloodTestConfigResponse data)
+        public string DiagnoseBloodTest(string input, Dictionary<string, int> data)
         {
             string bloodTestKey = StringMatchAlgo(input, data);
             return bloodTestKey;
         }
-        public DiagnoseStatus DiagnoseCondition(string bloodTestKey, BloodTestConfigResponse data, int input)
+        public DiagnoseStatus DiagnoseCondition(int input, int treshold)
         {
-            var bloodTestEntity = data.BloodTestConfig.FirstOrDefault(x => x.Name == bloodTestKey);
-            if (bloodTestEntity == null)
-                return DiagnoseStatus.Unknown;
-
-            if(input <= bloodTestEntity.Threshold)
+            if(input <= treshold)
             {
                 return DiagnoseStatus.Good;
             } 
-            else if(input > bloodTestEntity.Threshold)
+            else if(input > treshold)
             {
                 return DiagnoseStatus.Bad;
             }
@@ -33,7 +29,7 @@ namespace HelloHeart.Helpers
                 return DiagnoseStatus.Unknown;
             }
         }
-        private string StringMatchAlgo(string input, BloodTestConfigResponse data)
+        private string StringMatchAlgo(string input, Dictionary<string, int> data)
         {
             if (input.Length < 2)
             {
@@ -42,7 +38,7 @@ namespace HelloHeart.Helpers
 
             const int minimumMatchLimit = 30;
 
-            var scoredResults = FuzzySharp.Process.ExtractSorted(input, data.BloodTestConfig.Select(x => x.Name));
+            var scoredResults = FuzzySharp.Process.ExtractSorted(input, data.Select(x => x.Key));
 
             var scoredResultsArr = scoredResults?.ToArray();
 

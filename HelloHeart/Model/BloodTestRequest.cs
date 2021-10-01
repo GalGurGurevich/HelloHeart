@@ -8,6 +8,6 @@ namespace HelloHeart.Model
     public class BloodTestRequest
     {
         public string TestInput { get; set; }
-        public string TestNumber { get; set; }
+        public int TestNumber { get; set; }
     }
 }

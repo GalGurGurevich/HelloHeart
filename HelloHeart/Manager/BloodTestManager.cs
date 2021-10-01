@@ -33,18 +33,20 @@ namespace HelloHeart.Manager
             var bloodTestConfigMap = await GetBloodTestConfig();
 
             bloodTestResponse.Result = _inputValidator.DiagnoseBloodTest(bloodTest.TestInput, bloodTestConfigMap);
-            bloodTestResponse.ResultEvaluation = _inputValidator.DiagnoseCondition(bloodTestResponse.Result, bloodTestConfigMap, int.Parse(bloodTest.TestNumber));
+            var treshold = bloodTestConfigMap[bloodTestResponse.Result];
+            bloodTestResponse.ResultEvaluation = _inputValidator.DiagnoseCondition(bloodTest.TestNumber, treshold);
 
             return bloodTestResponse;
         }
 
-        public async Task<BloodTestConfigResponse> GetBloodTestConfig()
+        public async Task<Dictionary<string, int>> GetBloodTestConfig()
         {
-            BloodTestConfigResponse bloodTestConfigResponse = new BloodTestConfigResponse();
-            if(_cache.TryGetValue(_key, out bloodTestConfigResponse))
+            Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
+            Dictionary<string, int> obj = new Dictionary<string, int>();
+            if (_cache.TryGetValue(_key, out obj))
             {
-                bloodTestConfigResponse = (BloodTestConfigResponse)_cache.Get(_key);
-                return bloodTestConfigResponse;
+                keyValuePairs = (Dictionary<string, int>)_cache.Get(_key);
+                return keyValuePairs;
             }
             var path = _configuration["BloodTestConfig:Url"];
             var client = _clientFactory.CreateClient();
@@ -53,12 +55,16 @@ namespace HelloHeart.Manager
             {
                 var bloodTestObj = await response.Content.ReadAsStringAsync();
                 var dataSet = JsonConvert.DeserializeObject<BloodTestConfigResponse>(bloodTestObj);
-                _cache.Set(_key, dataSet);
+                foreach (var item in dataSet.BloodTestConfig)
+                {
+                    keyValuePairs.Add(item.Name, item.Threshold);
+                }
+                _cache.Set(_key, keyValuePairs);
                 if (dataSet?.BloodTestConfig != null)
-                    return dataSet;
+                    return keyValuePairs;
             }
 
-            return bloodTestConfigResponse;
+            return keyValuePairs;
         }
     }
 }
